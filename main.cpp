@@ -1,3 +1,4 @@
+
 //
 //  main.cpp
 //  rating system
@@ -10,7 +11,7 @@
 #include<string>
 #include<vector>
 using namespace std;
-class reselt{
+class result{
     private :
     int id;
     string name;
@@ -18,8 +19,8 @@ class reselt{
     string category;
     string proname;
     float ave;
-public:
-    athlete(int i,string n,float s[5])
+    public:
+    result(int i,string n,float s[5])
     {
         float sum=0,max=s[0],min=s[0];
         int j;
@@ -34,7 +35,7 @@ public:
                 min=s[j];
             sum+=s[j];
         }
-        ave=(sum-max-min)/5;
+        ave=(sum-max-min)/3;
     }
     float get_ave()
     {
@@ -71,47 +72,61 @@ int main()
 {
     int i,j;
     int m;
+    int f=1;
+    FILE* fp;
     int idsize;//参赛选手人数
-    cout<<"请输入参赛者的信息"<<endl;
+    cout<<"请输入参赛者人数"<<endl;
     cin>>m;
     idsize=m;
     int *id;
     id=new int[idsize];
     vector<float>aver;//建立一个vector类
     vector<string>name;
+    vector<string>category;
+    vector<string>proname;
     vector<vector<float>>x(m,vector<float>(5));
     cout<<"请输入所有参赛者信息"<<endl;
     for(i=0;i<m;i++)
     {
-        string z;
-        cout<<"第"<<i+1<<"名参赛者"<<endl;
+        string na;
+        string ca;
+        string pro;
+        cout<<"第"<<i+1<<"名参赛者编号"<<endl;
         cin>>id[i];
         cout<<"第"<<i+1<<"名参赛者"<<endl;
-        cin>>z;
-        name.push_back(z);
+        cout<<"选手姓名\n";
+        cin>>na;
+        name.push_back(na);
+        cout<<"节目类别\n";
+        cin>>ca;
+        category.push_back(ca);
+        cout<<"节目名称\n";
+        cin>>pro;
+        proname.push_back(pro);
+        
     }
     cout<<endl<<endl<<"=====比赛开始请裁判打分====="<<endl<<endl;
     for(i=0;i<m;i++)
     {
-        cout<<"为第"<<j+1<<"名选手打分"<<endl;
+        cout<<"为第"<<i+1<<"名选手打分"<<endl;
         for(j=0;j<5;j++)
         {
-            cout<<"为第"<<j+1<<"名选手打分"<<endl;
+            cout<<"第"<<j+1<<"位裁判打分"<<endl;
             cin>>x[i][j];
         }
             
     }
     cout<<endl<<endl<<"=====去掉一个最低分，去掉一个最高分，最终得分====="<<endl<<endl;
-    for(i=0,i<m,i++)
-        ｛
+    for(i=0;i<m;i++)
+    {
         float s[5];
-    for(j=0;j<5;j++)
-        s[j]=x[i][j];
-    result a(id[i],name[i],s);
-    a.display();
-    aver.push_back(a,get_ave());
+        for(j=0;j<5;j++)
+            s[j]=x[i][j];
+        result a(id[i],name[i],s);
+        a.display();
+        aver.push_back(a.get_ave());
     
-}
+     }
 for(i=1;i<m;i++)
     for(j=i;j>0;j--)
 {
@@ -128,4 +143,27 @@ for(i=1;i<m;i++)
         name[j-1]=pname;
     }
 }
-cout<<endl<<endl<<"=====按名次显示得分====="
+    cout<<endl<<endl<<"=====按名次显示得分====="<<endl<<endl;
+    cout<<"名次"<<"  "<<"   编号"<<"    姓名"<<"     "<<"节目类型"<<"     "<<"节目名称"<<"       "<<"得分"<<"      "<<endl;
+    for(i=m-1;i>=0;i--)
+    {
+        cout<<"第"<<f<<"名"<<"      "<<id[i]<<"      "<<name[i]<<"       "<<category[i]<<"       "<<proname[i]<<"        "<<aver[i]<<endl;
+        f++;
+    }
+fp = fopen("//Users//qiuyu//Desktop//rating\ system//system.csv","w");
+   if(fp==NULL)
+        printf("文件不能打开！\n");
+else
+ {
+    fprintf(fp,"名次,编号,成绩,姓名,节目类别,节目名称,\n");
+    f=1;
+    for(i=m-1;i>=0;i--)
+    {
+        fprintf(fp,"%d,%d,%f,%s,%s,%s\n",f,id[i],aver[i],name[i].c_str(),category[i].c_str(),
+                proname[i].c_str());
+        f++;
+    }
+    printf("信息保存成功！\n");
+    fclose(fp);
+  }
+}
