@@ -18,6 +18,9 @@ class result{
     float score[5];
     string category;
     string proname;
+    string rname;
+    string rsex;
+    string rtel;
     float ave;
     public:
     result(int i,string n,float s[5])
@@ -74,6 +77,7 @@ int main()
     int m;
     int f=1;
     FILE* fp;
+    FILE* fp1;
     int idsize;//参赛选手人数
     cout<<"请输入参赛者人数"<<endl;
     cin>>m;
@@ -84,6 +88,9 @@ int main()
     vector<string>name;
     vector<string>category;
     vector<string>proname;
+    vector<string>rname;
+    vector<string>rsex;
+    vector<string>rtel;
     vector<vector<float>>x(m,vector<float>(5));
     cout<<"请输入所有参赛者信息"<<endl;
     for(i=0;i<m;i++)
@@ -105,6 +112,22 @@ int main()
         proname.push_back(pro);
         
     }
+    cout<<"请输入所有裁判信息"<<endl;
+    for(i=0; i<5; i++)
+    {
+        string rna;
+        string rse;
+        string rte;
+        cout<<"第"<<i+1<<"位裁判姓名"<<endl;
+        cin>>rna;
+        rname.push_back(rna);
+        cout<<"第"<<i+1<<"位裁判性别"<<endl;
+        cin>>rse;
+        rsex.push_back(rse);
+        cout<<"第"<<i+1<<"位裁判电话号"<<endl;
+        cin>>rte;
+        rtel.push_back(rte);
+    }
     cout<<endl<<endl<<"=====比赛开始请裁判打分====="<<endl<<endl;
     for(i=0;i<m;i++)
     {
@@ -116,7 +139,7 @@ int main()
         }
             
     }
-    cout<<endl<<endl<<"=====去掉一个最低分，去掉一个最高分，最终得分====="<<endl<<endl;
+    cout<<endl<<endl<<"=====去掉一个最低分，去掉一个最高分的最终得分====="<<endl<<endl;
     for(i=0;i<m;i++)
     {
         float s[5];
@@ -150,7 +173,14 @@ for(i=1;i<m;i++)
         cout<<"第"<<f<<"名"<<"      "<<id[i]<<"      "<<name[i]<<"       "<<category[i]<<"       "<<proname[i]<<"        "<<aver[i]<<endl;
         f++;
     }
-fp = fopen("//Users//qiuyu//Desktop//rating\ system//system.csv","w");
+    cout<<endl<<endl<<"=====显示裁判信息====="<<endl<<endl;
+    for(i=0; i<5 ;i++)
+    {
+        cout<<"第"<<i+1<<"位裁判姓名"<<rname[i]<<endl;
+        cout<<"第"<<i+1<<"位裁判性别"<<rsex[i]<<endl;
+        cout<<"第"<<i+1<<"位裁判电话号"<<rtel[i]<<endl;
+    }
+fp = fopen("//Users//qiuyu//Desktop//rating system//system.csv","w");
    if(fp==NULL)
         printf("文件不能打开！\n");
 else
@@ -166,4 +196,20 @@ else
     printf("信息保存成功！\n");
     fclose(fp);
   }
+    fp1 = fopen("//Users//qiuyu//Desktop//rating system//re.csv","w");
+    if(fp1==NULL)
+        printf("文件不能打开！\n");
+    else
+    {
+        fprintf(fp1,"姓名,性别,电话号,\n");
+        f=1;
+        for(i=0;i<5;i++)
+        {
+            fprintf(fp,"%s,%s,%s,裁判%d\n",rname[i].c_str(),rsex[i].c_str(),rtel[i].c_str(),i+1);
+            f++;
+        }
+        printf("信息保存成功！\n");
+        fclose(fp1);
+    }
+
 }
